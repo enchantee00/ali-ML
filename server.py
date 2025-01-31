@@ -105,30 +105,30 @@ async def ask():
     if session_id not in conversation_memory:
         conversation_memory[session_id] = ConversationBufferMemory()
 
-    # ✅ 질문을 기존 대화 히스토리에 추가
+    # 질문을 기존 대화 히스토리에 추가
     memory = conversation_memory[session_id]
     memory.save_context({"input": question}, {"output": ""})  # 기존 문맥 유지
 
-    # ✅ 질문에서 카테고리 판별
+    # 질문에서 카테고리 판별
     category = determine_category(question)
 
     if category not in FAISS_DB_PATHS:
         return Response(json.dumps({"error": "No matching category found"}, ensure_ascii=False),
                         status=400, mimetype="application/json; charset=utf-8")
 
-    # ✅ 해당 카테고리의 FAISS DB 로드
+    # 해당 카테고리의 FAISS DB 로드
     db_path = FAISS_DB_PATHS[category]
     db, retriever = load_faiss_db(db_path)
 
-    # ✅ RAG 실행 (이전 대화 내용과 함께)
+    # RAG 실행 (이전 대화 내용과 함께)
     rag_chain = rag(retriever, llm)
 
     with torch.no_grad():  # 메모리 최적화
-        # ✅ 이전 대화 히스토리를 함께 전달하여 LLM 호출
+        # 이전 대화 히스토리를 함께 전달하여 LLM 호출
         full_prompt = memory.load_memory_variables({})["history"] + "\n" + question
         response = await asyncio.to_thread(rag_chain.invoke, full_prompt)
 
-    # ✅ 답변을 대화 메모리에 저장 (맥락 유지)
+    # 답변을 대화 메모리에 저장 (맥락 유지)
     memory.save_context({"input": question}, {"output": response})
 
     torch.cuda.empty_cache()
