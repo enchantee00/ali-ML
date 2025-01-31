@@ -1,45 +1,74 @@
 from flask import Flask, request, jsonify, Response
 import json
-from llm import *
 import pickle
 import gc
-import asyncio 
+import asyncio
+import faiss
+import torch
+from sentence_transformers import SentenceTransformer
+from langchain.vectorstores import FAISS
+from langchain.embeddings import HuggingFaceEmbeddings
+from llm import *
+
 
 app = Flask(__name__)
 
-# 임베딩 설정
-model_path = "intfloat/multilingual-e5-base"
-model_kwargs = {'device': 'cuda'}
+model_path = "nlpai-lab/KURE-v1"
+model_kwargs = {'device': 'cuda:1'}
 encode_kwargs = {'normalize_embeddings': True}
 embeddings = HuggingFaceEmbeddings(
     model_name=model_path,
     model_kwargs=model_kwargs,
     encode_kwargs=encode_kwargs
 )
-db = None
-rag_chain = None
 
-# LLM 설정
+sentence_model = SentenceTransformer(model_path)
+
 llm = setup_llm_pipeline()
 
-@app.route('/', methods=['GET'])
-def home():
-    return "Hello, World!"
+FAISS_DB_PATHS = {
+    "고용절차": "./data/faiss/kure-v1/고용절차/고용절차",
+    "취업 및 준수사항": "./data/faiss/kure-v1/취업 및 준수사항/취업 및 준수사항",
+    "노동법 및 권리보호": "./data/faiss/kure-v1/노동법 및 권리보호/노동법 및 권리보호",
+    "출입국 및 체류": "./data/faiss/kure-v1/출입국 및 체류/출입국 및 체류",
+    "사용자 의무": "./data/faiss/kure-v1/사용자 의무/사용자 의무"
+}
 
-@app.route('/setup', methods=['GET'])
-def setup():
-    global db, rag_chain
 
-    faiss_db_directory = "./data/faiss/외국인노동법"
-    # 빈 docstore와 index_to_docstore_id 생성
+CATEGORY_DESCRIPTIONS = {
+    "고용절차": "외국인 근로자의 고용 과정과 절차, 고용 자격, 고용 제한 및 허가와 관련된 정보",
+    "취업 및 준수사항": "외국인 근로자의 취업 절차, 자격 요건, 보험 가입, 출입국 관리법 등의 준수사항",
+    "노동법 및 권리보호": "외국인 근로자의 노동법 관련 보호, 근로 기준법, 최저임금 및 권리 구제 절차",
+    "출입국 및 체류": "외국인의 출입국 절차, 체류 관련 법률, 비자, 국제결혼 및 장례 관련 정보",
+    "사용자 의무": "고용주의 법적 의무, 고용 변동 신고, 근로 조건, 보험 가입 및 성희롱 예방 조치"
+}
+
+category_sentences = list(CATEGORY_DESCRIPTIONS.values())
+category_names = list(CATEGORY_DESCRIPTIONS.keys())
+category_embeddings = sentence_model.encode(category_sentences, normalize_embeddings=True)
+
+embedding_size = category_embeddings.shape[1]
+category_index = faiss.IndexFlatL2(embedding_size)
+category_index.add(category_embeddings)  # 카테고리 벡터 추가
+
+
+def determine_category(question):
+    """KURE-v1을 사용하여 질문을 임베딩 후 FAISS에서 가장 가까운 카테고리를 선택"""
+    query_embedding = sentence_model.encode([question], normalize_embeddings=True)
+    D, I = category_index.search(query_embedding, k=1)  # 가장 가까운 카테고리 검색
+
+    return category_names[I[0][0]]  # 가장 가까운 카테고리 반환
+
+def load_faiss_db(faiss_db_directory):
+    """FAISS DB를 로드하는 함수"""
     with open(faiss_db_directory + "_index_to_docstore_id.pkl", "rb") as f:
         index_to_docstore_id = pickle.load(f)
 
     with open(faiss_db_directory + "_docstore.pkl", "rb") as f:
         docstore = pickle.load(f)
 
-    # 인덱스 로드 및 FAISS 초기화
     index = faiss.read_index(faiss_db_directory + "_faiss_db.index")
+
     db = FAISS(
         embedding_function=embeddings,
         index=index,
@@ -48,31 +77,44 @@ def setup():
     )
 
     retriever = db.as_retriever(search_type="mmr", search_kwargs={'k': 3, 'fetch_k': 8})
-    rag_chain = rag(retriever, llm)
+    
+    return db, retriever
 
-    return jsonify({"message": f"FAISS DB initialized successfully"})
 
+@app.route('/', methods=['GET'])
+def home():
+    return "Hello, World!"
 
 @app.route('/ask', methods=['POST'])
 async def ask():
-    global rag_chain
-
     data = request.get_json()
     question = data.get('question')
 
     if not question:
-        return Response(json.dumps({"error": "No question provided"}, ensure_ascii=False), 
+        return Response(json.dumps({"error": "No question provided"}, ensure_ascii=False),
                         status=400, mimetype="application/json; charset=utf-8")
+
+    category = determine_category(question)
+
+    if category not in FAISS_DB_PATHS:
+        return Response(json.dumps({"error": "No matching category found"}, ensure_ascii=False),
+                        status=400, mimetype="application/json; charset=utf-8")
+
+    db_path = FAISS_DB_PATHS[category]
+    db, retriever = load_faiss_db(db_path)
+
+    rag_chain = rag(retriever, llm)
 
     with torch.no_grad():  # 메모리 최적화
         response = await asyncio.to_thread(rag_chain.invoke, question)  # 비동기 호출
 
     torch.cuda.empty_cache()
-    gc.collect()  
+    gc.collect()
 
-    # JSON 응답을 ensure_ascii=False로 직접 설정
-    return Response(json.dumps({"answer": response}, ensure_ascii=False), 
+    return Response(json.dumps({"category": category, "answer": response}, ensure_ascii=False),
                     status=200, mimetype="application/json; charset=utf-8")
+
+
 
 if __name__ == '__main__':
     port = 5000
