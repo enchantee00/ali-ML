@@ -8,10 +8,13 @@ import torch
 from sentence_transformers import SentenceTransformer
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.memory import ConversationBufferMemory  # 대화 히스토리 관리 추가
 from llm import *
 
 
 app = Flask(__name__)
+app.secret_key = "super_secret_key"  # 세션 사용을 위한 키 설정
+
 
 model_path = "nlpai-lab/KURE-v1"
 model_kwargs = {'device': 'cuda:1'}
@@ -23,8 +26,10 @@ embeddings = HuggingFaceEmbeddings(
 )
 
 sentence_model = SentenceTransformer(model_path)
-
 llm = setup_llm_pipeline()
+
+conversation_memory = {}
+
 
 FAISS_DB_PATHS = {
     "고용절차": "./data/faiss/kure-v1/고용절차/고용절차",
@@ -42,6 +47,7 @@ CATEGORY_DESCRIPTIONS = {
     "출입국 및 체류": "외국인의 출입국 절차, 체류 관련 법률, 비자, 국제결혼 및 장례 관련 정보",
     "사용자 의무": "고용주의 법적 의무, 고용 변동 신고, 근로 조건, 보험 가입 및 성희롱 예방 조치"
 }
+
 
 category_sentences = list(CATEGORY_DESCRIPTIONS.values())
 category_names = list(CATEGORY_DESCRIPTIONS.keys())
@@ -89,31 +95,47 @@ def home():
 async def ask():
     data = request.get_json()
     question = data.get('question')
+    session_id = data.get('session_id', 'default')  # 세션 ID를 요청에서 가져옴 (없으면 기본 세션)
 
     if not question:
         return Response(json.dumps({"error": "No question provided"}, ensure_ascii=False),
                         status=400, mimetype="application/json; charset=utf-8")
 
+    # 세션 ID 기반으로 대화 메모리 가져오기 (없으면 새로 생성)
+    if session_id not in conversation_memory:
+        conversation_memory[session_id] = ConversationBufferMemory()
+
+    # ✅ 질문을 기존 대화 히스토리에 추가
+    memory = conversation_memory[session_id]
+    memory.save_context({"input": question}, {"output": ""})  # 기존 문맥 유지
+
+    # ✅ 질문에서 카테고리 판별
     category = determine_category(question)
 
     if category not in FAISS_DB_PATHS:
         return Response(json.dumps({"error": "No matching category found"}, ensure_ascii=False),
                         status=400, mimetype="application/json; charset=utf-8")
 
+    # ✅ 해당 카테고리의 FAISS DB 로드
     db_path = FAISS_DB_PATHS[category]
     db, retriever = load_faiss_db(db_path)
 
+    # ✅ RAG 실행 (이전 대화 내용과 함께)
     rag_chain = rag(retriever, llm)
 
     with torch.no_grad():  # 메모리 최적화
-        response = await asyncio.to_thread(rag_chain.invoke, question)  # 비동기 호출
+        # ✅ 이전 대화 히스토리를 함께 전달하여 LLM 호출
+        full_prompt = memory.load_memory_variables({})["history"] + "\n" + question
+        response = await asyncio.to_thread(rag_chain.invoke, full_prompt)
+
+    # ✅ 답변을 대화 메모리에 저장 (맥락 유지)
+    memory.save_context({"input": question}, {"output": response})
 
     torch.cuda.empty_cache()
     gc.collect()
 
-    return Response(json.dumps({"category": category, "answer": response}, ensure_ascii=False),
+    return Response(json.dumps({"category": category, "answer": response, "session_id": session_id}, ensure_ascii=False),
                     status=200, mimetype="application/json; charset=utf-8")
-
 
 
 if __name__ == '__main__':
