@@ -5,3 +5,12 @@
 {"time":"2025-02-01T12:35:38.613330406Z","level":"INFO","msg":"sender: started","stream_id":"05gdfdq0"}
 {"time":"2025-02-01T12:35:38.613486766Z","level":"INFO","msg":"handler: started","stream_id":"05gdfdq0"}
 {"time":"2025-02-01T12:35:38.919519496Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-02-01T16:10:59.64516068Z","level":"INFO","msg":"stream: closing","id":"05gdfdq0"}
+{"time":"2025-02-01T16:10:59.645201126Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-02-01T16:10:59.64654073Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-02-01T16:11:00.50662952Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-02-01T16:11:01.038188211Z","level":"INFO","msg":"handler: closed","stream_id":"05gdfdq0"}
+{"time":"2025-02-01T16:11:01.03830858Z","level":"INFO","msg":"sender: closed","stream_id":"05gdfdq0"}
+{"time":"2025-02-01T16:11:01.038276486Z","level":"INFO","msg":"writer: Close: closed","stream_id":"05gdfdq0"}
+{"time":"2025-02-01T16:11:01.038437661Z","level":"INFO","msg":"stream: closed","id":"05gdfdq0"}
+{"time":"2025-02-01T16:11:01.038631985Z","level":"WARN","msg":"runwork: ignoring record after close","work":{"Record":{"RecordType":{"Request":{"RequestType":{"InternalMessages":{}}}},"control":{"local":true,"mailbox_slot":"zuq6677i20xe","connection_id":"127.0.0.1:47772"},"_info":{"stream_id":"05gdfdq0"}}}}

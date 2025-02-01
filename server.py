@@ -10,6 +10,8 @@ from sentence_transformers import SentenceTransformer
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.memory import ConversationBufferMemory
+import uvicorn
+import time  # 추가
 from llm import *
 
 app = FastAPI()
@@ -81,7 +83,7 @@ def load_faiss_db(faiss_db_directory: str):
         index_to_docstore_id=index_to_docstore_id
     )
 
-    retriever = db.as_retriever(search_type="mmr", search_kwargs={"k": 3, "fetch_k": 8})
+    retriever = db.as_retriever(search_type="similarity", search_kwargs={"k": 3, "fetch_k": 8})
     return db, retriever
 
 
@@ -99,6 +101,8 @@ def home():
 
 @app.post("/ask")
 async def ask(request: QuestionRequest):
+    start_time = time.time()  # 시작 시간 기록
+
     question = request.question
     session_id = request.session_id
 
@@ -127,6 +131,11 @@ async def ask(request: QuestionRequest):
     # 답변을 대화 메모리에 저장 (맥락 유지)
     memory.save_context({"input": question}, {"output": response})
 
+    # 처리 시간 계산
+    end_time = time.time()
+    processing_time = round(end_time - start_time, 2)  
+    print(f"processing_time: {processing_time}")
+
     # 메모리 정리
     torch.cuda.empty_cache()
     gc.collect()
@@ -140,5 +149,4 @@ async def ask(request: QuestionRequest):
 
 # FastAPI 실행 (Uvicorn)
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5000, reload=True)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
