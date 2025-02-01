@@ -1,0 +1,40 @@
+  0%|                                                                 | 0/1134 [00:00<?, ?it/s]It is strongly recommended to train Gemma2 models with the `eager` attention implementation instead of `sdpa`. Use `eager` with `AutoModelForCausalLM.from_pretrained('<path-to-checkpoint>', attn_implementation='eager')`.
+ 10%|████▊                                           | 114/1134 [15:56<2:57:28, 10.44s/it]Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+{'loss': 2.0257, 'grad_norm': 0.9039801359176636, 'learning_rate': 0.0001998220640569395, 'epoch': 0.01}
+{'loss': 1.4711, 'grad_norm': 0.4614355266094208, 'learning_rate': 0.00019786476868327403, 'epoch': 0.02}
+{'loss': 1.2986, 'grad_norm': 0.5861552357673645, 'learning_rate': 0.00019590747330960854, 'epoch': 0.03}
+{'loss': 1.2245, 'grad_norm': 0.7687020897865295, 'learning_rate': 0.00019395017793594308, 'epoch': 0.04}
+{'loss': 1.2214, 'grad_norm': 0.5274838805198669, 'learning_rate': 0.0001919928825622776, 'epoch': 0.05}
+{'loss': 1.4046, 'grad_norm': 0.46070772409439087, 'learning_rate': 0.00019003558718861212, 'epoch': 0.06}
+{'loss': 1.1594, 'grad_norm': 0.47586095333099365, 'learning_rate': 0.00018807829181494663, 'epoch': 0.07}
+{'loss': 1.0667, 'grad_norm': 0.5673670172691345, 'learning_rate': 0.00018612099644128114, 'epoch': 0.08}
+{'loss': 0.9524, 'grad_norm': 0.8154698014259338, 'learning_rate': 0.00018416370106761568, 'epoch': 0.09}
+{'loss': 1.2658, 'grad_norm': 0.4758773744106293, 'learning_rate': 0.00018220640569395016, 'epoch': 0.1}
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+ 15%|███████▎                                        | 173/1134 [31:12<2:40:40, 10.03s/it]Traceback (most recent call last):
+  File "/home/jiyoon/dev/ali-ML/models/ko-gemma-9b.py", line 101, in <module>             
+{'eval_loss': 1.1133675575256348, 'eval_runtime': 415.5641, 'eval_samples_per_second': 4.851, 'eval_steps_per_second': 2.426, 'epoch': 0.1}
+{'loss': 1.2205, 'grad_norm': 0.4320201873779297, 'learning_rate': 0.0001802491103202847, 'epoch': 0.11}
+{'loss': 1.0492, 'grad_norm': 0.5534629225730896, 'learning_rate': 0.0001782918149466192, 'epoch': 0.12}
+{'loss': 0.9601, 'grad_norm': 0.7078672647476196, 'learning_rate': 0.00017633451957295375, 'epoch': 0.13}
+{'loss': 1.0084, 'grad_norm': 0.5570493340492249, 'learning_rate': 0.00017437722419928826, 'epoch': 0.14}
+{'loss': 1.2525, 'grad_norm': 0.5373674035072327, 'learning_rate': 0.0001724199288256228, 'epoch': 0.15}
+    trainer.train()
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/trainer.py", line 2171, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/trainer.py", line 2531, in _inner_training_loop
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/trainer.py", line 3712, in training_step
+    self.accelerator.backward(loss, **kwargs)
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/accelerate/accelerator.py", line 2246, in backward
+    loss.backward(**kwargs)
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/_tensor.py", line 581, in backward
+    torch.autograd.backward(
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/autograd/__init__.py", line 347, in backward
+    _engine_run_backward(
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/autograd/graph.py", line 825, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

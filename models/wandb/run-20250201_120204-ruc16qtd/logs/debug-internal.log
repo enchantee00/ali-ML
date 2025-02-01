@@ -1,0 +1,15 @@
+{"time":"2025-02-01T12:02:04.506133281Z","level":"INFO","msg":"stream: starting","core version":"0.19.5","symlink path":"/home/jiyoon/dev/ali-ML/models/wandb/run-20250201_120204-ruc16qtd/logs/debug-core.log"}
+{"time":"2025-02-01T12:02:04.620031896Z","level":"INFO","msg":"created new stream","id":"ruc16qtd"}
+{"time":"2025-02-01T12:02:04.620456791Z","level":"INFO","msg":"stream: started","id":"ruc16qtd"}
+{"time":"2025-02-01T12:02:04.620593696Z","level":"INFO","msg":"writer: Do: started","stream_id":"ruc16qtd"}
+{"time":"2025-02-01T12:02:04.62069935Z","level":"INFO","msg":"sender: started","stream_id":"ruc16qtd"}
+{"time":"2025-02-01T12:02:04.62088538Z","level":"INFO","msg":"handler: started","stream_id":"ruc16qtd"}
+{"time":"2025-02-01T12:02:04.9673877Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-02-01T12:02:06.0505497Z","level":"INFO","msg":"stream: closing","id":"ruc16qtd"}
+{"time":"2025-02-01T12:02:06.050589326Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-02-01T12:02:06.05178106Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-02-01T12:02:06.804153876Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-02-01T12:02:07.066090105Z","level":"INFO","msg":"handler: closed","stream_id":"ruc16qtd"}
+{"time":"2025-02-01T12:02:07.0661755Z","level":"INFO","msg":"writer: Close: closed","stream_id":"ruc16qtd"}
+{"time":"2025-02-01T12:02:07.066204456Z","level":"INFO","msg":"sender: closed","stream_id":"ruc16qtd"}
+{"time":"2025-02-01T12:02:07.06636202Z","level":"INFO","msg":"stream: closed","id":"ruc16qtd"}

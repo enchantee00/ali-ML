@@ -1,0 +1,7 @@
+{"time":"2025-02-01T12:35:38.501070825Z","level":"INFO","msg":"stream: starting","core version":"0.19.5","symlink path":"/home/jiyoon/dev/ali-ML/models/wandb/run-20250201_123538-05gdfdq0/logs/debug-core.log"}
+{"time":"2025-02-01T12:35:38.613012613Z","level":"INFO","msg":"created new stream","id":"05gdfdq0"}
+{"time":"2025-02-01T12:35:38.613057952Z","level":"INFO","msg":"stream: started","id":"05gdfdq0"}
+{"time":"2025-02-01T12:35:38.613240416Z","level":"INFO","msg":"writer: Do: started","stream_id":"05gdfdq0"}
+{"time":"2025-02-01T12:35:38.613330406Z","level":"INFO","msg":"sender: started","stream_id":"05gdfdq0"}
+{"time":"2025-02-01T12:35:38.613486766Z","level":"INFO","msg":"handler: started","stream_id":"05gdfdq0"}
+{"time":"2025-02-01T12:35:38.919519496Z","level":"INFO","msg":"Starting system monitor"}
