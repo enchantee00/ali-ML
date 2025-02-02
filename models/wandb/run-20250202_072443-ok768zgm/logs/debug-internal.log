@@ -1,0 +1,15 @@
+{"time":"2025-02-02T07:24:43.674314374Z","level":"INFO","msg":"stream: starting","core version":"0.19.5","symlink path":"/home/jiyoon/dev/ali-ML/models/wandb/run-20250202_072443-ok768zgm/logs/debug-core.log"}
+{"time":"2025-02-02T07:24:43.78420243Z","level":"INFO","msg":"created new stream","id":"ok768zgm"}
+{"time":"2025-02-02T07:24:43.78423714Z","level":"INFO","msg":"stream: started","id":"ok768zgm"}
+{"time":"2025-02-02T07:24:43.784266109Z","level":"INFO","msg":"writer: Do: started","stream_id":"ok768zgm"}
+{"time":"2025-02-02T07:24:43.784289391Z","level":"INFO","msg":"sender: started","stream_id":"ok768zgm"}
+{"time":"2025-02-02T07:24:43.784378391Z","level":"INFO","msg":"handler: started","stream_id":"ok768zgm"}
+{"time":"2025-02-02T07:24:44.08885736Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-02-02T07:24:45.443010886Z","level":"INFO","msg":"stream: closing","id":"ok768zgm"}
+{"time":"2025-02-02T07:24:45.443069995Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-02-02T07:24:45.444156761Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-02-02T07:24:46.277895841Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-02-02T07:24:46.621756576Z","level":"INFO","msg":"handler: closed","stream_id":"ok768zgm"}
+{"time":"2025-02-02T07:24:46.621821606Z","level":"INFO","msg":"writer: Close: closed","stream_id":"ok768zgm"}
+{"time":"2025-02-02T07:24:46.621844381Z","level":"INFO","msg":"sender: closed","stream_id":"ok768zgm"}
+{"time":"2025-02-02T07:24:46.622001015Z","level":"INFO","msg":"stream: closed","id":"ok768zgm"}

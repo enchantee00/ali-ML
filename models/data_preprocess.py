@@ -33,20 +33,6 @@ def create_dataset(data):
     
     return Dataset.from_dict(dataset_dict)
 
-def generate_prompts(examples):
-    prompt_list=[]
-    for context, question, answer in zip(examples["context"], examples["question"], examples["answer"]):
-        prompt_list.append(
-            f"""<bos><start_of_turn>user
-            다음 문서를 참고하여 질문에 답변해주세요:
-            
-            Context: {context}
-            Question: {question}
-            <end_of_turn>
-            <start_of_turn>model
-            {answer}<end_of_turn><eos>"""
-        )
-    return prompt_list
     
 if __name__=="__main__":
 
@@ -61,6 +47,8 @@ if __name__=="__main__":
     data_save_path = "../data/processed"
     train_dataset.save_to_disk(os.path.join(data_save_path, "train"))
     val_dataset.save_to_disk(os.path.join(data_save_path, "val"))
+
+    # pdb.set_trace()
 
     print(f"데이터셋이 {data_save_path}에 저장되었습니다!")
 
