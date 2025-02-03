@@ -1,0 +1,117 @@
+  0%|                                                 | 0/283 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/home/jiyoon/dev/ali-ML/models/llama3-korean-blossom-8b.py", line 127, in <module>
+    trainer.train()
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/trainer.py", line 2171, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/trainer.py", line 2531, in _inner_training_loop
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/trainer.py", line 3675, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/trainer.py", line 3731, in compute_loss
+    outputs = model(**inputs)
+              ^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/parallel/data_parallel.py", line 193, in forward
+    outputs = self.parallel_apply(replicas, inputs, module_kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/parallel/data_parallel.py", line 212, in parallel_apply
+    return parallel_apply(
+           ^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/parallel/parallel_apply.py", line 126, in parallel_apply
+    output.reraise()
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/_utils.py", line 715, in reraise
+    raise exception
+RuntimeError: Caught RuntimeError in replica 1 on device 1.
+Original Traceback (most recent call last):
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/parallel/parallel_apply.py", line 96, in _worker
+    output = module(*input, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/peft/peft_model.py", line 1719, in forward
+    return self.base_model(
+           ^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/peft/tuners/tuners_utils.py", line 197, in forward
+    return self.model.forward(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/models/llama/modeling_llama.py", line 831, in forward
+    outputs = self.model(
+              ^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/models/llama/modeling_llama.py", line 589, in forward
+    layer_outputs = decoder_layer(
+                    ^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/models/llama/modeling_llama.py", line 332, in forward
+    hidden_states, self_attn_weights = self.self_attn(
+                                       ^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/models/llama/modeling_llama.py", line 266, in forward
+    query_states = self.q_proj(hidden_states).view(hidden_shape).transpose(1, 2)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/peft/tuners/lora/bnb.py", line 496, in forward
+    result = self.base_layer(x, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/bitsandbytes/nn/modules.py", line 484, in forward
+    return bnb.matmul_4bit(x, self.weight.t(), bias=bias, quant_state=self.weight.quant_state).to(inp_dtype)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/bitsandbytes/autograd/_functions.py", line 533, in matmul_4bit
+    return MatMul4Bit.apply(A, B, out, bias, quant_state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/autograd/function.py", line 575, in apply
+    return super().apply(*args, **kwargs)  # type: ignore[misc]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/bitsandbytes/autograd/_functions.py", line 462, in forward
+    output = torch.nn.functional.linear(A, F.dequantize_4bit(B, quant_state).to(A.dtype).t(), bias)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/bitsandbytes/functional.py", line 1362, in dequantize_4bit
+    is_on_gpu([A, absmax, out])
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/bitsandbytes/functional.py", line 469, in is_on_gpu
+    raise RuntimeError(
+RuntimeError: Input tensors need to be on the same GPU, but found the following tensor and device combinations:
+ [(torch.Size([1, 8388608]), device(type='cuda', index=1)), (torch.Size([262144]), device(type='cuda', index=0)), (torch.Size([4096, 4096]), device(type='cuda', index=1))]

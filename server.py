@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Header
 from pydantic import BaseModel
 import torch
 import faiss
@@ -9,12 +9,15 @@ import gc
 from sentence_transformers import SentenceTransformer
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.memory import ConversationBufferMemory
+from langchain.memory import ConversationBufferWindowMemory
 import uvicorn
 import time  # 추가
 from llm import *
 
 app = FastAPI()
+
+API_KEY = "RIS-alitouch-key"
+
 
 model_path = "nlpai-lab/KURE-v1"
 model_kwargs = {"device": "cuda:1"}
@@ -56,7 +59,12 @@ category_index.add(category_embeddings)  # 카테고리 벡터 추가
 
 class QuestionRequest(BaseModel):
     question: str
-    session_id: str = "default"
+    sessionId: str = "default"
+
+
+def verify_api_key(x_api_key: str = Header(...)):
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=403, detail="Invalid API Key")
 
 
 def determine_category(question: str) -> str:
@@ -83,32 +91,33 @@ def load_faiss_db(faiss_db_directory: str):
         index_to_docstore_id=index_to_docstore_id
     )
 
-    retriever = db.as_retriever(search_type="similarity", search_kwargs={"k": 3, "fetch_k": 8})
+    retriever = db.as_retriever(search_type="similarity", search_kwargs={'k': 3, 'fetch_k': 5})
     return db, retriever
 
 
 def get_conversation_memory(session_id: str):
     """세션 ID 기반으로 대화 메모리를 반환 (없으면 생성)"""
     if session_id not in conversation_memory:
-        conversation_memory[session_id] = ConversationBufferMemory()
+        conversation_memory[session_id] = ConversationBufferWindowMemory(k=3, return_messages=True)
     return conversation_memory[session_id]
 
 
 @app.get("/")
-def home():
+def home(api_key: str = Depends(verify_api_key)):
     return {"message": "Hello, World!"}
 
 
 @app.post("/ask")
-async def ask(request: QuestionRequest):
+async def ask(request: QuestionRequest, api_key: str = Depends(verify_api_key)):
     start_time = time.time()  # 시작 시간 기록
 
     question = request.question
-    session_id = request.session_id
+    session_id = request.sessionId
 
     # 세션 ID 기반 대화 메모리 가져오기
     memory = get_conversation_memory(session_id)
-    memory.save_context({"input": question}, {"output": ""})
+    past_messages = memory.load_memory_variables({})["history"]
+    history_text = "\n".join([f"User: {msg['input']}\nModel: {msg['output']}" for msg in past_messages])
 
     # 질문에서 카테고리 판별
     category = determine_category(question)
@@ -120,30 +129,30 @@ async def ask(request: QuestionRequest):
     db_path = FAISS_DB_PATHS[category]
     db, retriever = load_faiss_db(db_path)
 
-    # RAG 실행 (이전 대화 내용과 함께)
-    rag_chain = rag(retriever, llm)
+    retrieved_docs = retriever.get_relevant_documents(question)
+    retrieved_text = "\n".join([doc.page_content for doc in retrieved_docs])
 
-    with torch.no_grad():  # 메모리 최적화
-        # 이전 대화 히스토리를 함께 전달하여 LLM 호출
-        full_prompt = memory.load_memory_variables({})["history"] + "\n" + question
-        response = await asyncio.to_thread(rag_chain.invoke, full_prompt)
+    rag_chain = rag_gemma(llm)
+
+    with torch.no_grad(): 
+        response = await asyncio.to_thread(rag_chain.invoke, {
+            "history_text": history_text,  
+            "context": retrieved_text,     
+            "question": question
+        })
 
     # 답변을 대화 메모리에 저장 (맥락 유지)
-    memory.save_context({"input": question}, {"output": response})
+    memory.save_context({"input": question}, {"output": response.strip()})
 
     # 처리 시간 계산
     end_time = time.time()
     processing_time = round(end_time - start_time, 2)  
     print(f"processing_time: {processing_time}")
 
-    # 메모리 정리
-    torch.cuda.empty_cache()
-    gc.collect()
-
     return {
         "category": category,
         "answer": response,
-        "session_id": session_id
+        "title": "Not yet bitch"
     }
 
 

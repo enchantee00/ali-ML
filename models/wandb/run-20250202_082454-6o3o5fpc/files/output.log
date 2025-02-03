@@ -1,0 +1,43 @@
+  0%|                                                 | 0/283 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/home/jiyoon/dev/ali-ML/models/llama3-korean-blossom-8b.py", line 126, in <module>
+    trainer.train()
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/trainer.py", line 2171, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/trainer.py", line 2531, in _inner_training_loop
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/trainer.py", line 3675, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/transformers/trainer.py", line 3731, in compute_loss
+    outputs = model(**inputs)
+              ^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/parallel/data_parallel.py", line 192, in forward
+    replicas = self.replicate(self.module, self.device_ids[: len(inputs)])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/parallel/data_parallel.py", line 199, in replicate
+    return replicate(module, device_ids, not torch.is_grad_enabled())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/parallel/replicate.py", line 134, in replicate
+    param_copies = _broadcast_coalesced_reshape(params, devices, detach)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/parallel/replicate.py", line 103, in _broadcast_coalesced_reshape
+    tensor_copies = Broadcast.apply(devices, *tensors)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/autograd/function.py", line 575, in apply
+    return super().apply(*args, **kwargs)  # type: ignore[misc]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/parallel/_functions.py", line 22, in forward
+    outputs = comm.broadcast_coalesced(inputs, ctx.target_gpus)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jiyoon/miniconda3/envs/ali/lib/python3.12/site-packages/torch/nn/parallel/comm.py", line 67, in broadcast_coalesced
+    return torch._C._broadcast_coalesced(tensors, devices, buffer_size)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 112.00 MiB. GPU 1 has a total capacity of 15.73 GiB of which 34.31 MiB is free. Process 1310230 has 10.05 GiB memory in use. Including non-PyTorch memory, this process has 5.63 GiB memory in use. Of the allocated memory 5.35 GiB is allocated by PyTorch, and 21.82 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

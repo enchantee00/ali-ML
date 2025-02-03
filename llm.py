@@ -51,12 +51,16 @@ def setup_llm_pipeline():
         model_id,
         config=config,
         quantization_config=bnb_config,
-        device_map="auto",
+        device_map="sequential",
         trust_remote_code=True
     )
 
+    # model_name = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
+    # model = AutoModelForCausalLM.from_pretrained("./models/saved_models/llama3-8b", device_map="auto", quantization_config=bnb_config) 
+    # tokenizer = AutoTokenizer.from_pretrained(model_name)
+
     # LoRA 어댑터 적용 (선택 사항)
-    lora_adapter_path = "./models/lora_adapter"
+    lora_adapter_path = "./models/lora_adapter/gemma2"
     if os.path.exists(lora_adapter_path):
         model = PeftModel.from_pretrained(model, lora_adapter_path)
 
@@ -66,8 +70,9 @@ def setup_llm_pipeline():
         model=model,
         tokenizer=tokenizer,
         return_full_text=False,
-        max_new_tokens=450,
-        device_map="auto"
+        device_map="auto",
+        # repetition_penalty=1.1, 
+        max_new_tokens=350,
     )
 
     hf_pipeline = HuggingFacePipeline(pipeline=text_generation_pipeline)
@@ -85,16 +90,62 @@ def format_docs(docs):
     return "\n".join(doc.page_content for doc in docs)
 
 
-def rag(retriever, llm):
+def rag_llama(llm):
+    template = """<|begin_of_text|>
+            <|start_header_id|>system<|end_header_id|>
+
+            당신은 법률 전문가 AI입니다. 주어진 법률 문서를 참고하여 사용자의 질문에 대해 정확하고 신뢰할 수 있는 답변을 제공하세요.
+            법률 용어를 명확하게 사용하고, 신뢰할 수 있는 정보를 바탕으로 근거를 제시하세요.
+
+            <|start_header_id|>user<|end_header_id|>
+
+            ### 법률 문서:
+            {context}
+
+            ### 질문:
+            {question}
+
+            ### 답변 지침:
+            - 법률 조항 또는 관련 판례를 근거로 하여 답변하세요.
+            - 사용자가 이해하기 쉽도록 간결하고 논리적으로 설명하세요.
+            - 필요 시, 법 조항의 원문을 인용하세요.
+
+            <|start_header_id|>assistant<|end_header_id|>
+            
+            """
+
+    prompt = PromptTemplate.from_template(template)
+
+    # RAG 체인 정의
+    rag_chain = (
+        {
+            "history_text": RunnablePassthrough(), 
+            "context": RunnablePassthrough(),       
+            "question": RunnablePassthrough()      
+        }
+        | prompt
+        | llm
+        | StrOutputParser()
+    )
+
+    return rag_chain
+
+
+def rag_gemma(llm):
     template = """
     <bos><start_of_turn>user
-    다음 정보를 바탕으로 질문에 답하세요.
+    이전 대화 내용:
+    {history_text}
 
-    Context: {context}
+    주어진 정보를 참고하여 질문에 답변하세요.
+            
+    참고 문서 내용:
+    {context}
 
-    Question: {question}
+    질문:
+    {question}
 
-    주어진 질문에만 답변하세요. 문장으로 답변해주세요. 답변할 때 질문의 주어를 써주세요.
+    답변을 문장으로 완성해 주세요. 질문의 주어를 포함하여 명확하게 설명해 주세요.
     <end_of_turn>
     <start_of_turn>model
     """
@@ -103,7 +154,11 @@ def rag(retriever, llm):
 
     # RAG 체인 정의
     rag_chain = (
-        {"context": retriever | format_docs, "question": RunnablePassthrough()}
+        {
+            "history_text": RunnablePassthrough(), 
+            "context": RunnablePassthrough(),       
+            "question": RunnablePassthrough()      
+        }
         | prompt
         | llm
         | StrOutputParser()

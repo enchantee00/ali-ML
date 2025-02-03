@@ -2,6 +2,7 @@ from transformers import (
     AutoTokenizer, 
     AutoModelForCausalLM, 
     TrainingArguments,
+    BitsAndBytesConfig
 )
 from datasets import Dataset, load_from_disk
 
@@ -56,12 +57,18 @@ train_dataset = load_from_disk(os.path.join(data_save_path, "train"))
 val_dataset = load_from_disk(os.path.join(data_save_path, "val"))
 
 
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,  # 4bit 양자화
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
 model_name = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
-model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype=torch.bfloat16) 
+local_model_dir = "./saved_models/llama-3-Korean-Bllossom-8B"
+model = AutoModelForCausalLM.from_pretrained("./saved_models/llama3-8b", device_map="auto", torch_dtype=torch.bfloat16) 
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-model = model.to_empty(device="cuda:0")
-
+# model = model.to_empty(device="cuda:2")
 
 peft_config = LoraConfig(
     task_type=TaskType.CAUSAL_LM,

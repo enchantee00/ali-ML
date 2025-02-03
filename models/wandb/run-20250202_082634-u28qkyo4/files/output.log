@@ -1,0 +1,134 @@
+ 10%|███▌                                | 114/1134 [11:30<1:53:30,  6.68s/it]Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+{'loss': 2.2453, 'grad_norm': 1.7551677227020264, 'learning_rate': 0.0001998220640569395, 'epoch': 0.01}
+{'loss': 1.5884, 'grad_norm': 0.7710381746292114, 'learning_rate': 0.00019786476868327403, 'epoch': 0.02}
+{'loss': 1.1126, 'grad_norm': 0.6022352576255798, 'learning_rate': 0.00019590747330960854, 'epoch': 0.03}
+{'loss': 0.93, 'grad_norm': 0.6173548102378845, 'learning_rate': 0.00019395017793594308, 'epoch': 0.04}
+{'loss': 1.0435, 'grad_norm': 0.6083266735076904, 'learning_rate': 0.0001919928825622776, 'epoch': 0.05}
+{'loss': 1.3866, 'grad_norm': 0.45942315459251404, 'learning_rate': 0.00019003558718861212, 'epoch': 0.06}
+{'loss': 1.2456, 'grad_norm': 0.4728013873100281, 'learning_rate': 0.00018807829181494663, 'epoch': 0.07}
+{'loss': 0.9317, 'grad_norm': 0.5025135278701782, 'learning_rate': 0.00018612099644128114, 'epoch': 0.08}
+{'loss': 0.7196, 'grad_norm': 0.5058338642120361, 'learning_rate': 0.00018416370106761568, 'epoch': 0.09}
+{'loss': 1.2405, 'grad_norm': 0.5211740136146545, 'learning_rate': 0.00018220640569395016, 'epoch': 0.1}
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+ 20%|███████▏                            | 228/1134 [28:39<1:43:28,  6.85s/it]Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+{'eval_loss': 1.044769048690796, 'eval_runtime': 332.7278, 'eval_samples_per_second': 6.059, 'eval_steps_per_second': 3.03, 'epoch': 0.1}
+{'loss': 1.3112, 'grad_norm': 0.4764111638069153, 'learning_rate': 0.0001802491103202847, 'epoch': 0.11}
+{'loss': 0.9798, 'grad_norm': 0.4602119028568268, 'learning_rate': 0.0001782918149466192, 'epoch': 0.12}
+{'loss': 0.7935, 'grad_norm': 0.42566925287246704, 'learning_rate': 0.00017633451957295375, 'epoch': 0.13}
+{'loss': 0.8641, 'grad_norm': 0.5060177445411682, 'learning_rate': 0.00017437722419928826, 'epoch': 0.14}
+{'loss': 1.2757, 'grad_norm': 0.47094789147377014, 'learning_rate': 0.0001724199288256228, 'epoch': 0.15}
+{'loss': 1.1648, 'grad_norm': 0.4197216033935547, 'learning_rate': 0.0001704626334519573, 'epoch': 0.16}
+{'loss': 0.8762, 'grad_norm': 0.4388897716999054, 'learning_rate': 0.00016850533807829184, 'epoch': 0.16}
+{'loss': 0.7095, 'grad_norm': 0.517417848110199, 'learning_rate': 0.00016654804270462633, 'epoch': 0.17}
+{'loss': 1.1176, 'grad_norm': 0.4702304005622864, 'learning_rate': 0.00016459074733096086, 'epoch': 0.18}
+{'loss': 1.2386, 'grad_norm': 0.46257859468460083, 'learning_rate': 0.00016263345195729537, 'epoch': 0.19}
+ 30%|██████████▊                         | 342/1134 [45:30<1:04:35,  4.89s/it]Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+{'eval_loss': 0.9830981492996216, 'eval_runtime': 332.4994, 'eval_samples_per_second': 6.063, 'eval_steps_per_second': 3.032, 'epoch': 0.2}
+{'loss': 1.0114, 'grad_norm': 0.47243043780326843, 'learning_rate': 0.0001606761565836299, 'epoch': 0.2}
+{'loss': 0.8058, 'grad_norm': 0.4540603458881378, 'learning_rate': 0.00015871886120996442, 'epoch': 0.21}
+{'loss': 0.8022, 'grad_norm': 0.5472509860992432, 'learning_rate': 0.00015676156583629893, 'epoch': 0.22}
+{'loss': 1.1962, 'grad_norm': 0.480528861284256, 'learning_rate': 0.00015480427046263347, 'epoch': 0.23}
+{'loss': 1.1723, 'grad_norm': 0.4430171549320221, 'learning_rate': 0.00015284697508896798, 'epoch': 0.24}
+{'loss': 0.8643, 'grad_norm': 0.4228113889694214, 'learning_rate': 0.00015088967971530251, 'epoch': 0.25}
+{'loss': 0.7039, 'grad_norm': 0.491163045167923, 'learning_rate': 0.000148932384341637, 'epoch': 0.26}
+{'loss': 1.0235, 'grad_norm': 0.4626152217388153, 'learning_rate': 0.00014697508896797153, 'epoch': 0.27}
+{'loss': 1.2184, 'grad_norm': 0.5029857158660889, 'learning_rate': 0.00014501779359430604, 'epoch': 0.28}
+{'loss': 0.9539, 'grad_norm': 0.4292484521865845, 'learning_rate': 0.00014306049822064058, 'epoch': 0.29}
+{'loss': 0.7794, 'grad_norm': 0.4498923420906067, 'learning_rate': 0.0001411032028469751, 'epoch': 0.3}
+ 40%|█████████████▋                    | 456/1134 [1:02:17<1:12:11,  6.39s/it]Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+{'eval_loss': 0.9537078738212585, 'eval_runtime': 332.8329, 'eval_samples_per_second': 6.057, 'eval_steps_per_second': 3.029, 'epoch': 0.3}
+{'loss': 0.7177, 'grad_norm': 0.5959724187850952, 'learning_rate': 0.00013914590747330963, 'epoch': 0.31}
+{'loss': 1.1704, 'grad_norm': 0.49728813767433167, 'learning_rate': 0.00013718861209964414, 'epoch': 0.32}
+{'loss': 1.1233, 'grad_norm': 0.3992316722869873, 'learning_rate': 0.00013523131672597868, 'epoch': 0.33}
+{'loss': 0.8577, 'grad_norm': 0.47482937574386597, 'learning_rate': 0.00013327402135231316, 'epoch': 0.34}
+{'loss': 0.6979, 'grad_norm': 0.44907987117767334, 'learning_rate': 0.0001313167259786477, 'epoch': 0.35}
+{'loss': 0.9237, 'grad_norm': 0.4518095850944519, 'learning_rate': 0.0001293594306049822, 'epoch': 0.36}
+{'loss': 1.1959, 'grad_norm': 0.4679430425167084, 'learning_rate': 0.00012740213523131672, 'epoch': 0.37}
+{'loss': 1.0454, 'grad_norm': 0.46467265486717224, 'learning_rate': 0.00012544483985765125, 'epoch': 0.38}
+{'loss': 0.7869, 'grad_norm': 0.46254706382751465, 'learning_rate': 0.00012348754448398576, 'epoch': 0.39}
+{'loss': 0.629, 'grad_norm': 0.5734169483184814, 'learning_rate': 0.0001215302491103203, 'epoch': 0.4}
+ 50%|█████████████████                 | 570/1134 [1:19:29<1:02:50,  6.68s/it]Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+{'eval_loss': 0.930854856967926, 'eval_runtime': 332.8099, 'eval_samples_per_second': 6.058, 'eval_steps_per_second': 3.029, 'epoch': 0.4}
+{'loss': 1.2236, 'grad_norm': 0.5090618133544922, 'learning_rate': 0.0001195729537366548, 'epoch': 0.41}
+{'loss': 1.2287, 'grad_norm': 0.44188591837882996, 'learning_rate': 0.00011761565836298933, 'epoch': 0.42}
+{'loss': 0.8272, 'grad_norm': 0.45759764313697815, 'learning_rate': 0.00011565836298932384, 'epoch': 0.43}
+{'loss': 0.7232, 'grad_norm': 0.4450054168701172, 'learning_rate': 0.00011370106761565838, 'epoch': 0.44}
+{'loss': 0.9022, 'grad_norm': 0.5460150241851807, 'learning_rate': 0.00011174377224199288, 'epoch': 0.45}
+{'loss': 1.1378, 'grad_norm': 0.5301687717437744, 'learning_rate': 0.00010978647686832741, 'epoch': 0.46}
+{'loss': 1.004, 'grad_norm': 0.4432702958583832, 'learning_rate': 0.00010782918149466192, 'epoch': 0.47}
+{'loss': 0.7672, 'grad_norm': 0.45530930161476135, 'learning_rate': 0.00010587188612099646, 'epoch': 0.48}
+{'loss': 0.5788, 'grad_norm': 0.4823130965232849, 'learning_rate': 0.00010391459074733096, 'epoch': 0.49}
+{'loss': 1.2191, 'grad_norm': 0.48493558168411255, 'learning_rate': 0.0001019572953736655, 'epoch': 0.49}
+ 60%|█████████████████████▋              | 684/1134 [1:37:11<46:07,  6.15s/it]Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+{'eval_loss': 0.9101828336715698, 'eval_runtime': 332.5798, 'eval_samples_per_second': 6.062, 'eval_steps_per_second': 3.031, 'epoch': 0.5}
+{'loss': 1.1617, 'grad_norm': 0.47022056579589844, 'learning_rate': 0.0001, 'epoch': 0.5}
+{'loss': 0.8282, 'grad_norm': 0.4743735194206238, 'learning_rate': 9.804270462633453e-05, 'epoch': 0.51}
+{'loss': 0.7283, 'grad_norm': 0.4843651056289673, 'learning_rate': 9.608540925266905e-05, 'epoch': 0.52}
+{'loss': 0.8107, 'grad_norm': 0.5163947343826294, 'learning_rate': 9.412811387900356e-05, 'epoch': 0.53}
+{'loss': 1.2059, 'grad_norm': 0.48573267459869385, 'learning_rate': 9.217081850533809e-05, 'epoch': 0.54}
+{'loss': 1.018, 'grad_norm': 0.4205448031425476, 'learning_rate': 9.021352313167261e-05, 'epoch': 0.55}
+{'loss': 0.7795, 'grad_norm': 0.47577139735221863, 'learning_rate': 8.825622775800713e-05, 'epoch': 0.56}
+{'loss': 0.5938, 'grad_norm': 0.4567987620830536, 'learning_rate': 8.629893238434164e-05, 'epoch': 0.57}
+{'loss': 1.1057, 'grad_norm': 0.5209261775016785, 'learning_rate': 8.434163701067615e-05, 'epoch': 0.58}
+{'loss': 1.1592, 'grad_norm': 0.4845738410949707, 'learning_rate': 8.238434163701068e-05, 'epoch': 0.59}
+{'loss': 0.874, 'grad_norm': 0.45676562190055847, 'learning_rate': 8.04270462633452e-05, 'epoch': 0.6}
+ 70%|█████████████████████████▎          | 798/1134 [1:53:53<24:57,  4.46s/it]Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+{'eval_loss': 0.8945960402488708, 'eval_runtime': 332.4723, 'eval_samples_per_second': 6.064, 'eval_steps_per_second': 3.032, 'epoch': 0.6}
+{'loss': 0.7375, 'grad_norm': 0.5064378380775452, 'learning_rate': 7.846975088967971e-05, 'epoch': 0.61}
+{'loss': 0.7382, 'grad_norm': 0.5369494557380676, 'learning_rate': 7.651245551601423e-05, 'epoch': 0.62}
+{'loss': 1.1795, 'grad_norm': 0.513275682926178, 'learning_rate': 7.455516014234876e-05, 'epoch': 0.63}
+{'loss': 1.0567, 'grad_norm': 0.4425716698169708, 'learning_rate': 7.259786476868328e-05, 'epoch': 0.64}
+{'loss': 0.768, 'grad_norm': 0.522287905216217, 'learning_rate': 7.06405693950178e-05, 'epoch': 0.65}
+{'loss': 0.6061, 'grad_norm': 0.5125557780265808, 'learning_rate': 6.868327402135231e-05, 'epoch': 0.66}
+{'loss': 0.994, 'grad_norm': 0.4910658597946167, 'learning_rate': 6.672597864768684e-05, 'epoch': 0.67}
+{'loss': 1.1275, 'grad_norm': 0.5452731251716614, 'learning_rate': 6.476868327402136e-05, 'epoch': 0.68}
+{'loss': 0.9005, 'grad_norm': 0.46191197633743286, 'learning_rate': 6.281138790035588e-05, 'epoch': 0.69}
+{'loss': 0.6849, 'grad_norm': 0.5058364272117615, 'learning_rate': 6.08540925266904e-05, 'epoch': 0.7}
+ 80%|████████████████████████████▉       | 912/1134 [2:10:51<24:31,  6.63s/it]Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+{'eval_loss': 0.8849112391471863, 'eval_runtime': 331.6462, 'eval_samples_per_second': 6.079, 'eval_steps_per_second': 3.039, 'epoch': 0.7}
+{'loss': 0.6938, 'grad_norm': 0.5184233784675598, 'learning_rate': 5.889679715302492e-05, 'epoch': 0.71}
+{'loss': 1.1764, 'grad_norm': 0.5114529728889465, 'learning_rate': 5.693950177935944e-05, 'epoch': 0.72}
+{'loss': 1.0652, 'grad_norm': 0.4359976649284363, 'learning_rate': 5.4982206405693945e-05, 'epoch': 0.73}
+{'loss': 0.8045, 'grad_norm': 0.5117532014846802, 'learning_rate': 5.302491103202847e-05, 'epoch': 0.74}
+{'loss': 0.6348, 'grad_norm': 0.5428286194801331, 'learning_rate': 5.1067615658362985e-05, 'epoch': 0.75}
+{'loss': 0.9511, 'grad_norm': 0.5325177311897278, 'learning_rate': 4.911032028469751e-05, 'epoch': 0.76}
+{'loss': 1.1217, 'grad_norm': 0.542922854423523, 'learning_rate': 4.7153024911032026e-05, 'epoch': 0.77}
+{'loss': 0.8842, 'grad_norm': 0.4859206974506378, 'learning_rate': 4.519572953736655e-05, 'epoch': 0.78}
+{'loss': 0.7612, 'grad_norm': 0.5502329468727112, 'learning_rate': 4.3238434163701066e-05, 'epoch': 0.79}
+{'loss': 0.6572, 'grad_norm': 0.5592729449272156, 'learning_rate': 4.128113879003559e-05, 'epoch': 0.8}
+ 90%|███████████████████████████████▋   | 1026/1134 [2:30:25<12:21,  6.87s/it]Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+Trainer.tokenizer is now deprecated. You should use Trainer.processing_class instead.
+{'eval_loss': 0.8741334080696106, 'eval_runtime': 331.6357, 'eval_samples_per_second': 6.079, 'eval_steps_per_second': 3.039, 'epoch': 0.8}
+{'loss': 1.1301, 'grad_norm': 0.4880196452140808, 'learning_rate': 3.932384341637011e-05, 'epoch': 0.81}
+{'loss': 1.0388, 'grad_norm': 0.47740960121154785, 'learning_rate': 3.736654804270463e-05, 'epoch': 0.81}
+{'loss': 0.7743, 'grad_norm': 0.49082404375076294, 'learning_rate': 3.540925266903915e-05, 'epoch': 0.82}
+{'loss': 0.631, 'grad_norm': 0.5599908232688904, 'learning_rate': 3.345195729537366e-05, 'epoch': 0.83}
+{'loss': 0.8949, 'grad_norm': 0.5374324917793274, 'learning_rate': 3.149466192170819e-05, 'epoch': 0.84}
+{'loss': 1.1219, 'grad_norm': 0.5046142339706421, 'learning_rate': 2.9537366548042704e-05, 'epoch': 0.85}
+{'loss': 0.979, 'grad_norm': 0.5338322520256042, 'learning_rate': 2.7580071174377227e-05, 'epoch': 0.86}
+{'loss': 0.7173, 'grad_norm': 0.505012035369873, 'learning_rate': 2.5622775800711747e-05, 'epoch': 0.87}
+{'loss': 0.5914, 'grad_norm': 0.5550899505615234, 'learning_rate': 2.3665480427046264e-05, 'epoch': 0.88}
+{'loss': 1.1137, 'grad_norm': 0.496628075838089, 'learning_rate': 2.1708185053380784e-05, 'epoch': 0.89}
+{'loss': 1.1127, 'grad_norm': 0.5294778347015381, 'learning_rate': 1.9750889679715305e-05, 'epoch': 0.9}
+100%|███████████████████████████████████| 1134/1134 [2:46:29<00:00,  8.81s/it]
+                                                                              
+{'eval_loss': 0.8677390217781067, 'eval_runtime': 330.679, 'eval_samples_per_second': 6.097, 'eval_steps_per_second': 3.048, 'epoch': 0.9}
+{'loss': 0.7756, 'grad_norm': 0.4710979759693146, 'learning_rate': 1.7793594306049825e-05, 'epoch': 0.91}
+{'loss': 0.6519, 'grad_norm': 0.5267865657806396, 'learning_rate': 1.583629893238434e-05, 'epoch': 0.92}
+{'loss': 0.845, 'grad_norm': 0.5387516021728516, 'learning_rate': 1.3879003558718862e-05, 'epoch': 0.93}
+{'loss': 1.0936, 'grad_norm': 0.5400446653366089, 'learning_rate': 1.1921708185053382e-05, 'epoch': 0.94}
+{'loss': 0.9547, 'grad_norm': 0.471482515335083, 'learning_rate': 9.9644128113879e-06, 'epoch': 0.95}
+{'loss': 0.7538, 'grad_norm': 0.5013960003852844, 'learning_rate': 8.00711743772242e-06, 'epoch': 0.96}
+{'loss': 0.5545, 'grad_norm': 0.4859291911125183, 'learning_rate': 6.04982206405694e-06, 'epoch': 0.97}
+{'loss': 1.1134, 'grad_norm': 0.5325459241867065, 'learning_rate': 4.092526690391459e-06, 'epoch': 0.98}
+{'loss': 0.8893, 'grad_norm': 0.4909983277320862, 'learning_rate': 2.135231316725979e-06, 'epoch': 0.99}
+{'loss': 0.662, 'grad_norm': 0.5313342213630676, 'learning_rate': 1.779359430604982e-07, 'epoch': 1.0}
+{'train_runtime': 9990.5339, 'train_samples_per_second': 1.816, 'train_steps_per_second': 0.114, 'train_loss': 0.9535669651822017, 'epoch': 1.0}
+LoRA 어댑터가 ./lora_adapterl/llama3에 저장되었습니다!
