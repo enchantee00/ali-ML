@@ -64,6 +64,8 @@ def setup_llm_pipeline():
     if os.path.exists(lora_adapter_path):
         model = PeftModel.from_pretrained(model, lora_adapter_path)
 
+    model = torch.compile(model)
+
     # HuggingFacePipeline 객체 생성
     text_generation_pipeline = pipeline(
         task="text-generation",

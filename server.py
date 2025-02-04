@@ -29,6 +29,7 @@ embeddings = HuggingFaceEmbeddings(
 )
 
 sentence_model = SentenceTransformer(model_path)
+sentence_model = torch.compile(sentence_model)
 llm = setup_llm_pipeline()
 conversation_memory = {}
 
