@@ -10,8 +10,11 @@ from sentence_transformers import SentenceTransformer
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.memory import ConversationBufferWindowMemory
+from langchain.schema import HumanMessage, AIMessage
 import uvicorn
-import time  # 추가
+import time 
+from torch.nn.attention import SDPBackend, sdpa_kernel
+
 from llm import *
 
 app = FastAPI()
@@ -30,7 +33,7 @@ embeddings = HuggingFaceEmbeddings(
 
 sentence_model = SentenceTransformer(model_path)
 sentence_model = torch.compile(sentence_model)
-llm = setup_llm_pipeline()
+_, _, llm = setup_llm_pipeline()
 conversation_memory = {}
 
 FAISS_DB_PATHS = {
@@ -92,7 +95,7 @@ def load_faiss_db(faiss_db_directory: str):
         index_to_docstore_id=index_to_docstore_id
     )
 
-    retriever = db.as_retriever(search_type="similarity", search_kwargs={'k': 3, 'fetch_k': 5})
+    retriever = db.as_retriever(search_type="mmr", search_kwargs={'k': 4, 'fetch_k': 6})
     return db, retriever
 
 
@@ -118,10 +121,17 @@ async def ask(request: QuestionRequest, api_key: str = Depends(verify_api_key)):
     # 세션 ID 기반 대화 메모리 가져오기
     memory = get_conversation_memory(session_id)
     past_messages = memory.load_memory_variables({})["history"]
-    history_text = "\n".join([f"User: {msg['input']}\nModel: {msg['output']}" for msg in past_messages])
+    history_text = "\n".join([
+        f"User: {msg.content}" if isinstance(msg, HumanMessage) else f"Model: {msg.content}"
+        for msg in past_messages
+    ])
+
 
     # 질문에서 카테고리 판별
     category = determine_category(question)
+    end_time = time.time()
+    processing_time = round(end_time - start_time, 2)
+    print(f"~category: {processing_time}")  
 
     if category not in FAISS_DB_PATHS:
         raise HTTPException(status_code=400, detail="No matching category found")
@@ -133,9 +143,16 @@ async def ask(request: QuestionRequest, api_key: str = Depends(verify_api_key)):
     retrieved_docs = retriever.get_relevant_documents(question)
     retrieved_text = "\n".join([doc.page_content for doc in retrieved_docs])
 
+    end_time = time.time()
+    processing_time = round(end_time - start_time, 2)
+    print(f"~faiss: {processing_time}")  
+
+    # rag_chain = rag_llama(llm)
     rag_chain = rag_gemma(llm)
 
-    with torch.no_grad(): 
+
+    # with sdpa_kernel(SDPBackend.FLASH_ATTENTION):  # ✅ Flash Attention 활성화
+    with torch.no_grad():  # 🔥 Inference에서 Gradient 계산 방지 (속도 향상)
         response = await asyncio.to_thread(rag_chain.invoke, {
             "history_text": history_text,  
             "context": retrieved_text,     

@@ -44,15 +44,16 @@ def setup_llm_pipeline():
     tokenizer.use_default_system_prompt = False
 
     config = Gemma2Config.from_pretrained(model_id)
-    config.attn_implementation = "eager"  # eager 방식 사용
+    # config.attn_implementation = "flash_attention_2"  # eager 방식 사용
 
     # 모델 로드 및 양자화 설정 적용
     model = Gemma2ForCausalLM.from_pretrained(
         model_id,
         config=config,
         quantization_config=bnb_config,
-        device_map="sequential",
-        trust_remote_code=True
+        device_map="auto",
+        trust_remote_code=True,
+        attn_implementation="flash_attention_2",
     )
 
     # model_name = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
@@ -60,26 +61,30 @@ def setup_llm_pipeline():
     # tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     # LoRA 어댑터 적용 (선택 사항)
-    lora_adapter_path = "./models/lora_adapter/gemma2"
-    if os.path.exists(lora_adapter_path):
-        model = PeftModel.from_pretrained(model, lora_adapter_path)
+    # lora_adapter_path = "./models/lora_adapter/gemma2"
+    # if os.path.exists(lora_adapter_path):
+    #     model = PeftModel.from_pretrained(model, lora_adapter_path)
 
-    model = torch.compile(model)
+    # model.generation_config.cache_implementation = "static"
+    # model = torch.compile(model, mode="max-autotune")  #
 
     # HuggingFacePipeline 객체 생성
     text_generation_pipeline = pipeline(
         task="text-generation",
         model=model,
         tokenizer=tokenizer,
-        return_full_text=False,
+        return_full_text=False, # True -> 입력 프롬프트 + 생성된 답변
         device_map="auto",
-        # repetition_penalty=1.1, 
-        max_new_tokens=350,
+        repetition_penalty=1.2,
+        # eos_token_id=tokenizer.eos_token_id, # 완전한 문장 생성 유도
+        max_new_tokens=512,
+        do_sample=False,  # 확률 기반 샘플링 없이 가장 확률 높은 단어 선택
+        temperature=0.5
     )
 
     hf_pipeline = HuggingFacePipeline(pipeline=text_generation_pipeline)
 
-    return hf_pipeline
+    return tokenizer, model, hf_pipeline
 
 
 def normalize_string(s):
@@ -94,27 +99,27 @@ def format_docs(docs):
 
 def rag_llama(llm):
     template = """<|begin_of_text|>
-            <|start_header_id|>system<|end_header_id|>
+    <|start_header_id|>system<|end_header_id|>
 
-            당신은 법률 전문가 AI입니다. 주어진 법률 문서를 참고하여 사용자의 질문에 대해 정확하고 신뢰할 수 있는 답변을 제공하세요.
-            법률 용어를 명확하게 사용하고, 신뢰할 수 있는 정보를 바탕으로 근거를 제시하세요.
+    당신은 법률 전문가 AI입니다. 주어진 법률 문서를 참고하여 사용자의 질문에 대해 정확하고 신뢰할 수 있는 답변을 제공하세요.
+    답변 시 다음 기준을 따르세요:
+    - 질문과 관련된 법률 조항만 요약하여 답변하세요.
+    - 답변은 명확하고 완결된 문장으로 구성하세요.
+    - 동일한 정보를 반복하지 마세요.
 
-            <|start_header_id|>user<|end_header_id|>
+    <|start_header_id|>user<|end_header_id|>
 
-            ### 법률 문서:
-            {context}
+    ### 이전 대화:
+    {history_text}
 
-            ### 질문:
-            {question}
+    ### 참고 법률 문서:
+    {context}
 
-            ### 답변 지침:
-            - 법률 조항 또는 관련 판례를 근거로 하여 답변하세요.
-            - 사용자가 이해하기 쉽도록 간결하고 논리적으로 설명하세요.
-            - 필요 시, 법 조항의 원문을 인용하세요.
+    ### 질문:
+    {question}
 
-            <|start_header_id|>assistant<|end_header_id|>
-            
-            """
+    <|start_header_id|>assistant<|end_header_id|>
+    """
 
     prompt = PromptTemplate.from_template(template)
 
@@ -134,20 +139,24 @@ def rag_llama(llm):
 
 
 def rag_gemma(llm):
-    template = """
-    <bos><start_of_turn>user
+    template = """<bos><start_of_turn>system
+    당신은 법률 전문가 AI입니다. 참고 문서를 바탕으로 정확하고 논리적인 답변을 제공하세요.
+    - 질문과 관련된 법률 조항만 요약하여 답변하세요.
+    - 답변은 명확하고 완결된 문장으로 구성하세요.
+    - 동일한 정보를 반복하지 마세요.
+
+    <end_of_turn>
+    <start_of_turn>user
     이전 대화 내용:
     {history_text}
 
-    주어진 정보를 참고하여 질문에 답변하세요.
-            
     참고 문서 내용:
     {context}
 
     질문:
     {question}
 
-    답변을 문장으로 완성해 주세요. 질문의 주어를 포함하여 명확하게 설명해 주세요.
+    명확하고 논리적인 문장으로 답변하세요. 질문에 대한 핵심 개념을 포함하여 일관된 문장으로 설명하세요.
     <end_of_turn>
     <start_of_turn>model
     """
