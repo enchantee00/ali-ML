@@ -34,7 +34,12 @@ embeddings = HuggingFaceEmbeddings(
 sentence_model = SentenceTransformer(model_path)
 sentence_model = torch.compile(sentence_model)
 _, _, llm = setup_llm_pipeline()
+# rag_chain = rag_llama(llm)
+rag_chain = rag_gemma(llm)
+title_chain = title_gemma(llm)
+
 conversation_memory = {}
+title_memory = {}
 
 FAISS_DB_PATHS = {
     "고용절차": "./data/faiss/kure-v1/고용절차/고용절차",
@@ -95,15 +100,33 @@ def load_faiss_db(faiss_db_directory: str):
         index_to_docstore_id=index_to_docstore_id
     )
 
-    retriever = db.as_retriever(search_type="mmr", search_kwargs={'k': 4, 'fetch_k': 6})
+    retriever = db.as_retriever(search_type="mmr", search_kwargs={'k': 3, 'fetch_k': 5})
     return db, retriever
 
 
 def get_conversation_memory(session_id: str):
     """세션 ID 기반으로 대화 메모리를 반환 (없으면 생성)"""
     if session_id not in conversation_memory:
-        conversation_memory[session_id] = ConversationBufferWindowMemory(k=3, return_messages=True)
+        conversation_memory[session_id] = ConversationBufferWindowMemory(k=1, return_messages=True)
     return conversation_memory[session_id]
+
+
+async def generate_response(rag_chain, history_text, retrieved_text, question):
+    with torch.no_grad():
+        response = await asyncio.to_thread(rag_chain.invoke, {
+            "history_text": history_text,  
+            "context": retrieved_text,     
+            "question": question
+        })
+    return response.strip()
+
+
+async def generate_title(title_chain, question):
+    with torch.no_grad():
+        response = await asyncio.to_thread(title_chain.invoke, {
+            "question": question
+        })
+    return response.strip()
 
 
 @app.get("/")
@@ -145,19 +168,17 @@ async def ask(request: QuestionRequest, api_key: str = Depends(verify_api_key)):
 
     end_time = time.time()
     processing_time = round(end_time - start_time, 2)
-    print(f"~faiss: {processing_time}")  
+    print(f"~faiss: {processing_time}")
 
-    # rag_chain = rag_llama(llm)
-    rag_chain = rag_gemma(llm)
+    # title, response 생성
+    if session_id in title_memory:
+        title = title_memory[session_id]
+    else:
+        title = await generate_title(title_chain, question) 
+        title_memory[session_id] = title 
 
+    response = await generate_response(rag_chain, history_text, retrieved_text, question)
 
-    # with sdpa_kernel(SDPBackend.FLASH_ATTENTION):  # ✅ Flash Attention 활성화
-    with torch.no_grad():  # 🔥 Inference에서 Gradient 계산 방지 (속도 향상)
-        response = await asyncio.to_thread(rag_chain.invoke, {
-            "history_text": history_text,  
-            "context": retrieved_text,     
-            "question": question
-        })
 
     # 답변을 대화 메모리에 저장 (맥락 유지)
     memory.save_context({"input": question}, {"output": response.strip()})
@@ -169,8 +190,8 @@ async def ask(request: QuestionRequest, api_key: str = Depends(verify_api_key)):
 
     return {
         "category": category,
+        "title": title,
         "answer": response,
-        "title": "Not yet bitch"
     }
 
 

@@ -79,7 +79,7 @@ def setup_llm_pipeline():
         # eos_token_id=tokenizer.eos_token_id, # 완전한 문장 생성 유도
         max_new_tokens=512,
         do_sample=False,  # 확률 기반 샘플링 없이 가장 확률 높은 단어 선택
-        temperature=0.5
+        # temperature=0.5
     )
 
     hf_pipeline = HuggingFacePipeline(pipeline=text_generation_pipeline)
@@ -95,6 +95,35 @@ def normalize_string(s):
 def format_docs(docs):
     """검색된 문서들을 하나의 문자열로 포맷팅"""
     return "\n".join(doc.page_content for doc in docs)
+
+
+def title_gemma(llm):
+    template = """<bos><start_of_turn>system
+    다음 질문을 반영한 간결한 제목을 만들어 주세요. 불필요한 기호나 설명 없이 제목만 포함하세요.
+
+    <end_of_turn>
+    <start_of_turn>user
+
+    질문:
+    {question}
+
+    <end_of_turn>
+    <start_of_turn>model
+    """
+
+    prompt = PromptTemplate.from_template(template)
+
+    # RAG 체인 정의
+    rag_chain = (
+        {
+            "question": RunnablePassthrough()      
+        }
+        | prompt
+        | llm
+        | StrOutputParser()
+    )
+
+    return rag_chain
 
 
 def rag_llama(llm):
