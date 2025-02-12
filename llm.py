@@ -4,6 +4,7 @@ import torch
 import fitz  # PyMuPDF
 import faiss
 from tqdm import tqdm
+
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
@@ -22,6 +23,7 @@ from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.output_parser import StrOutputParser
 from langchain.docstore import InMemoryDocstore
 from peft import PeftModel
+from accelerate import infer_auto_device_map, dispatch_model
 
 
 def setup_llm_pipeline():
@@ -37,6 +39,7 @@ def setup_llm_pipeline():
     )
 
     # 모델 ID 
+    # model_id = "DopeorNope/Ko-Mixtral-v1.4-MoE-7Bx2"
     model_id = "rtzr/ko-gemma-2-9b-it"
 
     # 토크나이저 로드 및 설정
@@ -44,17 +47,20 @@ def setup_llm_pipeline():
     tokenizer.use_default_system_prompt = False
 
     config = Gemma2Config.from_pretrained(model_id)
-    # config.attn_implementation = "flash_attention_2"  # eager 방식 사용
+    config.attn_implementation = "flash_attention_2"  # eager 방식 사용
 
     # 모델 로드 및 양자화 설정 적용
-    model = Gemma2ForCausalLM.from_pretrained(
+    model = AutoModelForCausalLM.from_pretrained(
         model_id,
         config=config,
         quantization_config=bnb_config,
         device_map="auto",
         trust_remote_code=True,
-        attn_implementation="flash_attention_2",
+        # attn_implementation="flash_attention_2",
     )
+    # device_map = infer_auto_device_map(model, dtype=torch.bfloat16)
+    # model = dispatch_model(model, device_map=device_map)
+
 
     # model_name = "MLP-KTLim/llama-3-Korean-Bllossom-8B"
     # model = AutoModelForCausalLM.from_pretrained("./models/saved_models/llama3-8b", device_map="auto", quantization_config=bnb_config) 
@@ -74,7 +80,6 @@ def setup_llm_pipeline():
         model=model,
         tokenizer=tokenizer,
         return_full_text=False, # True -> 입력 프롬프트 + 생성된 답변
-        device_map="auto",
         repetition_penalty=1.2,
         # eos_token_id=tokenizer.eos_token_id, # 완전한 문장 생성 유도
         max_new_tokens=512,
@@ -86,6 +91,13 @@ def setup_llm_pipeline():
 
     return tokenizer, model, hf_pipeline
 
+# def setup_llm_pipeline_vllm():
+#     model_id = "rtzr/ko-gemma-2-9b-it"
+#     vllm_pipeline = vLLMWrapper(model_id, tensor_parallel_size=2)
+#     hf_pipeline = HuggingFacePipeline(pipeline=vllm_pipeline)
+
+#     return hf_pipeline
+
 
 def normalize_string(s):
     """한글 문자열 정규화"""
@@ -95,6 +107,8 @@ def normalize_string(s):
 def format_docs(docs):
     """검색된 문서들을 하나의 문자열로 포맷팅"""
     return "\n".join(doc.page_content for doc in docs)
+
+
 
 
 def title_gemma(llm):
